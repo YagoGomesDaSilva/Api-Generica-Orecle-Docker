@@ -1,0 +1,28 @@
+version: '3.9'
+services:
+  oracle-db:
+    image: container-registry.oracle.com/database/express:21.3.0-xe
+    container_name: oracle-db
+    ports:
+      - "1521:1521"
+    environment:
+      - ORACLE_PWD=MyPassword123
+      - ORACLE_CHARACTERSET=AL32UTF8
+    volumes:
+      - oracle-data:/opt/oracle/oradata
+    restart: unless-stopped
+
+  metabase:
+    image: metabase/metabase:latest
+    container_name: metabase
+    ports:
+      - "3000:3000" # Porta do Metabase
+    environment:
+      - MB_DB_FILE=/metabase-data/metabase.db
+    volumes:
+      - metabase-data:/metabase-data
+    restart: unless-stopped
+
+volumes:
+  oracle-data:
+  metabase-data:
