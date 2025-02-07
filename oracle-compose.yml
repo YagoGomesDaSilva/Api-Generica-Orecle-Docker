@@ -4,25 +4,27 @@ services:
     image: container-registry.oracle.com/database/express:21.3.0-xe
     container_name: oracle-db
     ports:
-      - "1521:1521"
+      - "1521:1521"  # Porta do banco de dados Oracle
+      - "5500:5500"  # Porta para Oracle EM Express
     environment:
-      - ORACLE_PWD=MyPassword123
+      - ORACLE_PWD=UserAdmin123
       - ORACLE_CHARACTERSET=AL32UTF8
     volumes:
       - oracle-data:/opt/oracle/oradata
     restart: unless-stopped
 
-  metabase:
-    image: metabase/metabase:latest
-    container_name: metabase
+  dbeaver:
+    image: dbeaver/cloudbeaver:latest
+    container_name: dbeaver
     ports:
-      - "3000:3000" # Porta do Metabase
-    environment:
-      - MB_DB_FILE=/metabase-data/metabase.db
+      - "8081:8978"  # Expondo a interface web do DBeaver
     volumes:
-      - metabase-data:/metabase-data
+      - dbeaver-data:/opt/cloudbeaver/workspace
+    environment:
+      - CB_ADMIN_NAME=UserAdmin
+      - CB_ADMIN_PASSWORD=UserAdmin123
     restart: unless-stopped
 
 volumes:
   oracle-data:
-  metabase-data:
+  dbeaver-data:
